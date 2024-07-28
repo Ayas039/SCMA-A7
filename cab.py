@@ -1,14 +1,23 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 
-# Simulating cab availability data for demonstration
+# Simulating cab availability and pricing data
 def get_cab_availability(pickup_location):
-    # For demonstration, generate random availability data
+    # Generate random availability data for demonstration
     return {
         'SUV': np.random.randint(1, 10),
         'Sedan': np.random.randint(1, 15),
         'Mini': np.random.randint(1, 20)
+    }
+
+def get_cab_prices():
+    # Fixed prices for demonstration purposes
+    return {
+        'SUV': 20,  # Price per km
+        'Sedan': 15,  # Price per km
+        'Mini': 10  # Price per km
     }
 
 def main():
@@ -21,18 +30,26 @@ def main():
     st.markdown("---")
 
     # Cab availability check
-    st.markdown("## Check Cab Availability")
+    st.markdown("## Check Cab Availability and Prices")
     pickup_location_avail = st.text_input('Enter your current location', placeholder='Enter your location')
     
     if st.button('Check Availability'):
         if pickup_location_avail:
             available_cabs = get_cab_availability(pickup_location_avail)
+            cab_prices = get_cab_prices()
+            
             st.markdown(f"**Cabs available near {pickup_location_avail}:**")
-            st.write(f"SUVs: {available_cabs['SUV']}")
-            st.write(f"Sedans: {available_cabs['Sedan']}")
-            st.write(f"Minis: {available_cabs['Mini']}")
+            for cab_type, availability in available_cabs.items():
+                st.write(f"{cab_type}: {availability} available, ₹{cab_prices[cab_type]} per km")
+            
+            # Data visualization: Pie chart for cab availability
+            st.markdown("### Cab Availability Distribution")
+            fig, ax = plt.subplots()
+            ax.pie(available_cabs.values(), labels=available_cabs.keys(), autopct='%1.1f%%', startangle=90)
+            ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+            st.pyplot(fig)
         else:
-            st.warning('Please enter a location to check cab availability.')
+            st.warning('Please enter a location to check cab availability and prices.')
 
     st.markdown("---")
 
