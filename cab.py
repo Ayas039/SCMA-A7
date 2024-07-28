@@ -1,55 +1,61 @@
 import streamlit as st
-import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
+from PIL import Image
 
-# Simulating cab availability and pricing data
+# Function to simulate cab availability and pricing
 def get_cab_availability(pickup_location):
-    # Generate random availability data for demonstration
-    return {
+    # For demonstration, generate random availability and pricing data
+    availability = {
         'SUV': np.random.randint(1, 10),
         'Sedan': np.random.randint(1, 15),
         'Mini': np.random.randint(1, 20)
     }
-
-def get_cab_prices():
-    # Fixed prices for demonstration purposes
-    return {
-        'SUV': 20,  # Price per km
-        'Sedan': 15,  # Price per km
-        'Mini': 10  # Price per km
+    pricing = {
+        'SUV': '₹2000 - ₹3000',
+        'Sedan': '₹1500 - ₹2000',
+        'Mini': '₹1000 - ₹1500'
     }
+    return availability, pricing
 
+# Function to set background
+def set_background(image_path):
+    bg_img = Image.open(image_path)
+    st.image(bg_img, use_column_width=True)
+
+# Set up the app
 def main():
-    st.set_page_config(page_title='Cab Booking App', page_icon='🚖', layout='wide')
+    # App configuration
+    st.set_page_config(page_title='Easy Go', page_icon='🚖', layout='wide')
+
+    # Set background
+    set_background('path/to/your/background_image.png')  # Change to your image path
 
     # Header section
-    st.title('🚖 Welcome to the Cab Booking App')
-    st.markdown("### Your reliable ride, just a click away.")
-    
-    st.markdown("---")
+    st.title('🚖 Easy Go')
+    st.markdown("### Book Your Ride Easily with Easy Go")
 
     # Cab availability check
-    st.markdown("## Check Cab Availability and Prices")
+    st.markdown("## Check Cab Availability and Pricing")
     pickup_location_avail = st.text_input('Enter your current location', placeholder='Enter your location')
-    
+
     if st.button('Check Availability'):
         if pickup_location_avail:
-            available_cabs = get_cab_availability(pickup_location_avail)
-            cab_prices = get_cab_prices()
-            
+            available_cabs, cab_pricing = get_cab_availability(pickup_location_avail)
             st.markdown(f"**Cabs available near {pickup_location_avail}:**")
-            for cab_type, availability in available_cabs.items():
-                st.write(f"{cab_type}: {availability} available, ₹{cab_prices[cab_type]} per km")
-            
-            # Data visualization: Pie chart for cab availability
-            st.markdown("### Cab Availability Distribution")
-            fig, ax = plt.subplots()
-            ax.pie(available_cabs.values(), labels=available_cabs.keys(), autopct='%1.1f%%', startangle=90)
-            ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
-            st.pyplot(fig)
+            st.write(f"**SUVs:** {available_cabs['SUV']} available, {cab_pricing['SUV']}")
+            st.write(f"**Sedans:** {available_cabs['Sedan']} available, {cab_pricing['Sedan']}")
+            st.write(f"**Minis:** {available_cabs['Mini']} available, {cab_pricing['Mini']}")
+
+            # Display cab type images
+            col1, col2, col3 = st.columns(3)
+            with col1:
+                st.image('path/to/suv_image.png', caption='SUV', use_column_width=True)
+            with col2:
+                st.image('path/to/sedan_image.png', caption='Sedan', use_column_width=True)
+            with col3:
+                st.image('path/to/mini_image.png', caption='Mini', use_column_width=True)
         else:
-            st.warning('Please enter a location to check cab availability and prices.')
+            st.warning('Please enter a location to check cab availability.')
 
     st.markdown("---")
 
@@ -66,7 +72,6 @@ def main():
             pickup_location = st.text_input('Pickup Location', placeholder='Enter your pickup location')
             destination = st.text_input('Destination', placeholder='Enter your destination')
             booking_time = st.time_input('Booking Time')
-
             cab_type = st.selectbox('Select Cab Type', ['SUV', 'Sedan', 'Mini'])
 
         submit_button = st.form_submit_button(label='Book Now')
@@ -81,7 +86,7 @@ def main():
 
     # Footer
     st.markdown("---")
-    st.markdown("© 2024 Cab Booking App. All rights reserved.")
+    st.markdown("© 2024 Easy Go. All rights reserved.")
 
 if __name__ == '__main__':
     main()
