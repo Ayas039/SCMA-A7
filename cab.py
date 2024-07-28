@@ -1,61 +1,42 @@
 import streamlit as st
+import pandas as pd
 import numpy as np
-from PIL import Image
+import time
 
 # Function to simulate cab availability and pricing
-def get_cab_availability(pickup_location):
+def get_cab_data():
     # For demonstration, generate random availability and pricing data
-    availability = {
-        'SUV': np.random.randint(1, 10),
-        'Sedan': np.random.randint(1, 15),
-        'Mini': np.random.randint(1, 20)
+    return {
+        'Cab Type': ['SUV', 'Sedan', 'Mini'],
+        'Availability': [np.random.randint(1, 10), np.random.randint(1, 15), np.random.randint(1, 20)],
+        'Price (₹)': ['2000 - 3000', '1500 - 2000', '1000 - 1500']
     }
-    pricing = {
-        'SUV': '₹2000 - ₹3000',
-        'Sedan': '₹1500 - ₹2000',
-        'Mini': '₹1000 - ₹1500'
-    }
-    return availability, pricing
-
-# Function to set background
-def set_background(image_path):
-    bg_img = Image.open(image_path)
-    st.image(bg_img, use_column_width=True)
 
 # Set up the app
 def main():
-    # App configuration
     st.set_page_config(page_title='Easy Go', page_icon='🚖', layout='wide')
-
-    # Set background
-    set_background('path/to/your/background_image.png')  # Change to your image path
 
     # Header section
     st.title('🚖 Easy Go')
     st.markdown("### Book Your Ride Easily with Easy Go")
+    
+    st.markdown("---")
 
-    # Cab availability check
-    st.markdown("## Check Cab Availability and Pricing")
-    pickup_location_avail = st.text_input('Enter your current location', placeholder='Enter your location')
+    # Live dashboard for cab availability and pricing
+    st.markdown("## Live Dashboard: Cab Availability and Pricing")
+    
+    # Refresh data periodically
+    refresh_rate = 5  # seconds
+    while True:
+        cab_data = get_cab_data()
+        df = pd.DataFrame(cab_data)
 
-    if st.button('Check Availability'):
-        if pickup_location_avail:
-            available_cabs, cab_pricing = get_cab_availability(pickup_location_avail)
-            st.markdown(f"**Cabs available near {pickup_location_avail}:**")
-            st.write(f"**SUVs:** {available_cabs['SUV']} available, {cab_pricing['SUV']}")
-            st.write(f"**Sedans:** {available_cabs['Sedan']} available, {cab_pricing['Sedan']}")
-            st.write(f"**Minis:** {available_cabs['Mini']} available, {cab_pricing['Mini']}")
-
-            # Display cab type images
-            col1, col2, col3 = st.columns(3)
-            with col1:
-                st.image('path/to/suv_image.png', caption='SUV', use_column_width=True)
-            with col2:
-                st.image('path/to/sedan_image.png', caption='Sedan', use_column_width=True)
-            with col3:
-                st.image('path/to/mini_image.png', caption='Mini', use_column_width=True)
-        else:
-            st.warning('Please enter a location to check cab availability.')
+        st.write("### Current Cab Availability and Pricing")
+        st.dataframe(df, height=200)
+        
+        # Break loop to allow Streamlit's re-run mechanism to update the dashboard
+        time.sleep(refresh_rate)
+        st.experimental_rerun()
 
     st.markdown("---")
 
