@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+from datetime import datetime
 
 # Function to simulate cab availability and pricing
 def get_cab_data():
@@ -18,6 +19,12 @@ def main():
     # Header section
     st.title('🚖 Easy Go')
     st.markdown("### Book Your Ride Easily with Easy Go")
+    
+    st.markdown("---")
+
+    # Display current date
+    current_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    st.markdown(f"**Current Date and Time:** {current_date}")
     
     st.markdown("---")
 
