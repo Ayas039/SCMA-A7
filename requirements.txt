@@ -1,0 +1,10 @@
+streamlit
+Pillow
+pandas
+numpy
+sqlalchemy
+requests
+bcrypt
+matplotlib
+geopy
+folium
