@@ -1,13 +1,7 @@
 import streamlit as st
-from PIL import Image
 
 def main():
-    # Set the page configuration
     st.set_page_config(page_title='Cab Booking App', page_icon='🚖', layout='wide')
-
-    # Load and display logo
-    logo = Image.open('path/to/your/logo.png')
-    st.image(logo, width=150)
 
     # Header section
     st.title('🚖 Welcome to the Cab Booking App')
