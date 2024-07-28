@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import time
 
 # Function to simulate cab availability and pricing
 def get_cab_data():
@@ -25,19 +24,19 @@ def main():
     # Live dashboard for cab availability and pricing
     st.markdown("## Live Dashboard: Cab Availability and Pricing")
     
-    # Refresh data periodically
-    refresh_rate = 5  # seconds
-    while True:
+    # Display data
+    cab_data = get_cab_data()
+    df = pd.DataFrame(cab_data)
+
+    st.write("### Current Cab Availability and Pricing")
+    st.dataframe(df, height=200)
+
+    if st.button('Refresh Data'):
+        # Update data manually
         cab_data = get_cab_data()
         df = pd.DataFrame(cab_data)
-
-        st.write("### Current Cab Availability and Pricing")
         st.dataframe(df, height=200)
-        
-        # Break loop to allow Streamlit's re-run mechanism to update the dashboard
-        time.sleep(refresh_rate)
-        st.experimental_rerun()
-
+    
     st.markdown("---")
 
     # Booking form
