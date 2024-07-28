@@ -58,7 +58,9 @@ def main():
         with col2:
             pickup_location = st.text_input('Pickup Location', placeholder='Enter your pickup location')
             destination = st.text_input('Destination', placeholder='Enter your destination')
+            booking_date = st.date_input('Booking Date', min_value=datetime.today().date())
             booking_time = st.time_input('Booking Time')
+
             cab_type = st.selectbox('Select Cab Type', ['SUV', 'Sedan', 'Mini'])
 
         submit_button = st.form_submit_button(label='Book Now')
@@ -66,7 +68,7 @@ def main():
     # Booking Confirmation
     if submit_button:
         if name and pickup_location and destination:
-            st.success(f'Thank you {name}, your {cab_type} cab is booked from {pickup_location} to {destination} at {booking_time}.')
+            st.success(f'Thank you {name}, your {cab_type} cab is booked from {pickup_location} to {destination} on {booking_date} at {booking_time}.')
             st.balloons()
         else:
             st.error('Please fill in all the details to book a cab.')
